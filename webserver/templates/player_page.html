@@ -1,0 +1,52 @@
+{% extends 'error_and_home.html' %}
+
+{% block content %}
+    <div id="banner">
+        <div id="banner-content">
+        </div>
+    </div>
+
+    <form action="/player_page/{{ player_info['pid'] }}" method="post">
+        <input type="submit" class="connect" style="float: left;" onclick="favor(this)" name="favorite"
+               value="{{ is_favorite }}">
+    </form>
+
+    <div id="main-content">
+        <h2>{{ player_info['name'] }}</h2>
+        <h2><a href="/team_page/{{ player_info['tname'] }}">{{ player_info['tname'] }}</a></h2>
+        <center><img src="/static/assets/default_player_image.png" alt="Default Player Image"
+                     style="width:128px;height:128px;"></center>
+        <div class="row" style="margin-top: 20px;">
+            <script>var i = 0;</script>
+            {% for field, info in player_info.items()[3:] %}
+                <div class="column" style="background-color: #aaa;" align="center">
+                    <h3>{{ field }}</h3>
+                    <p>{{ info }}</p>
+                    <script>
+                        if (i % 2) {
+                            document.getElementsByClassName("column")[i].style.backgroundColor = '#aaa'
+                        }
+                        else {
+                            document.getElementsByClassName("column")[i].style.backgroundColor = '#bbb';
+                        }
+                        i = i + 1;
+                    </script>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function favor(favorite) {
+            if (favorite.value == "favorite") {
+                favorite.value = "un-favorite";
+                alert('You have favorited {{ player_info['name'] }}!');
+            }
+            else {
+                favorite.value = 'favorite';
+                alert('You have un-favorited {{ player_info['name'] }}!');
+            }
+        }
+    </script>
+{% endblock %}
+
+

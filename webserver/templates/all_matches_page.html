@@ -1,0 +1,88 @@
+{% extends 'error_and_home.html' %}
+
+{% block content %}
+    <div id="banner">
+        <div id="banner-content"></div>
+    </div>
+    <div id="banner2">
+        <div id="banner-content2">
+        </div>
+    </div>
+
+    <div id="main-content">
+        <form action="/all_matches_page" method="post" onsubmit="return ifSubmit();">
+            <div class="row" style="margin-top: 20px;">
+                <div class="column">
+                    <center><img src='/static/assets/default_team_image.png'
+                                 style="width:128px;height:128px;" id="home_team_img"></center>
+                    <center><h2>Home Team</h2></center>
+                    <center><select name="home_team" onchange="selectHomeTeam(this)">
+                        <option selected value> -- select a team --</option>
+                        {% for team in teams %}
+                            <option value="{{ team }}">{{ team }}</option>
+                        {% endfor %}
+                    </select></center>
+                </div>
+                <center><h1>vs.</h1></center>
+                <div class="column">
+                    <center><img src='/static/assets/default_team_image.png'
+                                 style="width:128px;height:128px;" id="away_team_img"></center>
+                    <center><h2>Away Team</h2></center>
+                    <center><select name="away_team" onchange="selectHomeTeam(this)">
+                        <option selected value> -- select a team --</option>
+                        {% for team in teams %}
+                            <option value="{{ team }}">{{ team }}</option>
+                        {% endfor %}
+                    </select></center>
+                </div>
+                <script>
+                    var homeTeam = JSON.parse('{{ home_team | tojson | safe}}');
+                    var awayTeam = JSON.parse('{{ away_team | tojson | safe }}');
+                    if (homeTeam) {
+                        document.getElementById('home_team_img').src = "/static/assets/teams/" + homeTeam + ".png";
+                        document.getElementsByName('home_team')[0].value = homeTeam;
+                    }
+                    if (awayTeam) {
+                        document.getElementById('away_team_img').src = "/static/assets/teams/" + awayTeam + ".png";
+                        document.getElementsByName('away_team')[0].value = awayTeam;
+                    }
+
+                </script>
+            </div>
+            <center><input type="image" src="/static/assets/go_button.png" alt="Go Button Image"
+                           style="width:150px;height:60px;" onclick="submitClick()"></center>
+        </form>
+
+        <center><h3>List of Matches</h3></center>
+        <div align="center">
+            {% for match in matches %}
+                <p><a href="/match_page/{{ match['home_tname'] }}/{{ match['away_tname'] }}/{{ match['date'] }}">
+                    {{ match['home_tname'] }} VS {{ match['away_tname'] }} ON {{ match['date'] }}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function ifSubmit() {
+            if (document.getElementsByName('home_team')[0].value != "" || document.getElementsByName('away_team')[0].value != "") {
+                return true;
+            }
+            return false;
+        }
+
+        function submitClick() {
+            if (document.getElementsByName('home_team')[0].value == "" && document.getElementsByName('away_team')[0].value == "") {
+                alert('Please select at least one team!');
+            }
+        }
+
+        function selectHomeTeam(select) {
+            if (select.value == "") {
+                document.getElementById(select.name + '_img').src = "/static/assets/default_team_image.png";
+            }
+            else {
+                document.getElementById(select.name + '_img').src = "/static/assets/teams/" + select.value + ".png";
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'error_and_home.html' %}
+
+{% block content %}
+    <div id="banner">
+        <div id="banner-content">
+        </div>
+    </div>
+
+    <form action="/team_page/{{ team_info['name'] }}" method="post">
+        <input type="submit" class="connect" style="float: left;" onclick="favor()" name="favorite"
+               value="{{ is_favorite }}">
+    </form>
+
+    <div id="main-content">
+        <div style="clear: both">
+            <h2 style="float: left">{{ team_info['name'] }}</h2>
+            <h2 style="float: right; padding-right: 20px">PPG: {{ team_info['ppg'] }}</h2>
+            <h2 style="float: right; padding-right: 20px">RPG: {{ team_info['rpg'] }}</h2>
+        </div>
+        <div style="clear: both">
+            <h2 style="float: left">{{ team_info['location'] }}</h2>
+            <h2 style="float: right; padding-right: 20px">OPPG: {{ team_info['oppg'] }}</h2>
+            <h2 style="float: right; padding-right: 20px">APG: {{ team_info['apg'] }}</h2>
+        </div>
+        <center><img src="/static/assets/teams/{{ team_info['name'] }}.png" alt="Default Team Image"
+                     style="width:128px;height:128px;"></center>
+        <div class="row" style="margin-top: 20px;">
+            <div class="column" style="background-color: #aaa;">
+                <h3>Roster</h3>
+                {% for player in team_palyers %}
+                    <p align="center"><a href="/player_page/{{ player['pid'] }}">{{ player['name'] }}</a></p>
+                {% endfor %}
+            </div>
+            <div class="column" style="background-color: #bbb;">
+                <h3>Coach</h3>
+                <p align="center"><a href="/coach_page/{{ team_coach['cid'] }}">{{ team_coach['name'] }}</a></p>
+            </div>
+            <div class="column" style="background-color: #aaa;">
+                <h3>Upcoming Matches</h3>
+                {% for match in team_matches %}
+                    <p align="center">
+                        <a href="/match_page/{{ match['home_tname'] }}/{{ match['away_tname'] }}/{{ match['date'] }}">
+                            {{ match['home_tname'] }} VS {{ match['away_tname'] }} ON {{ match['date'] }}
+                        </a>
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        function favor() {
+            if (document.getElementsByName('favorite')[0].value == "favorite") {
+                document.getElementsByName('favorite')[0].value = "un-favorite";
+                alert('You have favorited the {{ team_info['name'] }}!');
+            }
+            else {
+                document.getElementsByName('favorite')[0].value = 'favorite';
+                alert('You have un-favorited the {{ team_info['name'] }}!');
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'error_and_home.html' %}
+
+{% block content %}
+    <style>
+        div#banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url("/static/assets/all_nba_teams.png");
+            width: 100%;
+        }
+    </style>
+    <div id="banner">
+        <div id="banner-content">
+        </div>
+    </div>
+    <div id="main-content">
+        <p></p>
+        <center><img src="/static/assets/nba_logo.png" alt="NBA Logo Image" style="width:128px;height:70;"></center>
+        <h1>All NBA Teams</h1>
+        <div class="row" style="margin-top: 20px;">
+            <div class="column" style="background-color: #aaa; ">
+                {% for team in teams[:14] %}
+                    <p align="center"><a href="/team_page/{{ team }}">{{ team }}</a></p>
+                {% endfor %}
+            </div>
+            <div class="column" style="background-color: #bbb; ">
+                {% for team in teams[14:] %}
+                    <p align="center"><a href="/team_page/{{ team }}">{{ team }}</a></p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

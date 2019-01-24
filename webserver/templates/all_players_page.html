@@ -1,0 +1,62 @@
+{% extends 'error_and_home.html' %}
+
+{% block content %}
+    <div id="banner">
+        <div id="banner-content">
+        </div>
+    </div>
+
+    <form action="/all_players_page" method="post" onsubmit="return submitClick();">
+        <input type="text" name="search" style="margin-left: 20px;width: 150px;position: relative;z-index: 10"
+               placeholder="keyword">
+        <input type="submit" value="search" style="z-index: 10;position:relative;" onclick="search()">
+    </form>
+
+    {% if search %}
+        <div align="center">
+            {% for player in search %}
+                <p><a href="/player_page/{{ player['pid'] }}">{{ player['name'] }}</a></p>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div id="main-content">
+            <div class="row" style="margin-top: 20px;">
+                <script>var i = 0;</script>
+                {% for field, info in top_10.items() %}
+                    <div class="column" style="background-color: #aaa; clear:both;" align="center">
+                        <h3>{{ field }} top 10 players</h3>
+                        {% for pid, name in info %}
+                            <p><a href="/player_page/{{ pid }}">{{ name }}</a></p>
+                        {% endfor %}
+                    </div>
+                    <script>
+                        if (i % 2) {
+                            document.getElementsByClassName('column')[i].style.backgroundColor = '#aaa';
+                        }
+                        else {
+                            document.getElementsByClassName('column')[i].style.backgroundColor = '#bbb';
+                        }
+                        i = i + 1;
+                    </script>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+
+
+    <script>
+        function submitClick() {
+            if (document.getElementsByName('search')[0].value == "") {
+                return false;
+            }
+            return true;
+        }
+
+        function search() {
+            if (document.getElementsByName('search')[0].value == "") {
+                alert('The keyword must not be null!')
+            }
+        }
+    </script>
+{% endblock %}
